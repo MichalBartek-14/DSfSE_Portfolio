@@ -32,4 +32,15 @@ Additionally, I attempted to **produce a machine learning algorithm** to predict
 
 Since the pictures cannot be added into README, they are included in the summarizing documents.
 
-**Output of the ML algorithm to predict energy production (not used in the final project).**  
+**Output of the ML algorithm to predict energy production (not used in the final project).** 
+
+## Reflection  
+I improved my skills in **statistical analysis** and learned to **visualize** and **interpret data** effectively. However, I recognize that my experience with advanced statistical techniques, such as **machine learning algorithms**, remains limited. While the tutorials and videos enhanced my understanding, applying these techniques in the project would have better reinforced my learning.  
+
+### Self-Assessment  
+- **Skill in Statistical Analysis:** 80%  
+- **Advanced Statistical Techniques (e.g., ML Algorithms):** 60%  
+
+### Sources  
+- **Polynomial Regression Concept Video**  
+

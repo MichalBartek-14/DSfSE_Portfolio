@@ -5,7 +5,6 @@ import geopandas as gpd
 from shapely.geometry import Point
 
 def process_the_nc(input_file,output_file,boundaries):
-
     nc_file = input_file
     ds = xr.open_dataset(input_file)
     # the ds manipulation in order to obtain only measurements at 8am and 8pm for 2021
@@ -62,11 +61,11 @@ def loop_through_files(input_directory,output_directory):
             iy = parts[7][2:]
             print(ix)
             print(iy)
-            # Generate the output shapefile name with the extracted ix and iy
+            #output shapefile name with the extracted ix and iy
             output_shapefile = os.path.join(output_directory, f"SHP_WINS50_ix{ix}_iy{iy}_2021_8am.shp")
             input_file = os.path.join(input_directory, file_name)  # Full path to the input file
 
-            # Process the current NetCDF file and save the output shapefile
+            #process the current NetCDF file and save the output shapefile
             process_the_nc(input_file, output_shapefile,nl_border)
 
 # We read the borders for the Netherlands since for this purpose only need the dutch windmills

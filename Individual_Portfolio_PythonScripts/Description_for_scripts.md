@@ -1,6 +1,12 @@
 # Python scripts I have developed during the course of Data Science for Smart Environments with the Learning goal they reflect.
 
-These scripts were used to download, process, analyse and produce meaningful results for the Project of Wind Energy in the Netherlands.
+## A) Training for Goal 1 (`trainingGoal1.py`)  G1
+
+In this script I tried to apply the knowledge and skills for small adhoc tasks in a separte python file.
+I tried to apply basic libraries like numpy and pandas which I wanted to improve in my first learning goal.
+The rest of the scripts were focused on the group project to which we dedicated the majority of the course time.
+
+These following scripts were developed to download, process, analyse and produce meaningful results for the Project of Wind Energy in the Netherlands.
 Scripts in this repository are only the scripts developed by Michal Bartek and for the full functionality they need to be grouped with other scripts for the Project.
 I add the csvs used for these scripts for the replicability: some alterations need to be done in the paths and installations of the libraries for smooth implementation.
 

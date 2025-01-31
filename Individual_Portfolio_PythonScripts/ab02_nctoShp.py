@@ -13,23 +13,25 @@ def process_the_nc(input_file,output_file,boundaries):
     time_pd = pd.to_datetime(time_str)
     # Filter for the year 2021 and 8am
     time_2021 = time_pd[time_pd.year == 2021]
+    #time_2021_8am = time_2021[time_2021.hour == 8]
+    #the timestamp was changed to 8am AND 8pm
     time_2021_8am = time_2021[(time_2021.hour == 8) | (time_2021.hour == 20)]
-    #filter the data
+    # filter the data
     filtered_data = ds.sel(time=time_2021_8am)
-    #netCDF data to a pandas DataFrame
     fdf = filtered_data.to_dataframe()
 
     dataset = xr.open_dataset(nc_file)
-    #optionally save as csv
-    #df = dataset.to_dataframe()
+    # Convert NetCDF data to a pandas DataFrame
+    df = dataset.to_dataframe()
+    # Save as CSV (if necessary)
     #df.to_csv("ix052_iy180_2019010100-2022010100.csv")
 
     geometry = [Point(lon, lat) for lon, lat in zip(fdf['lon'], fdf['lat'])]
     gdf = gpd.GeoDataFrame(fdf, geometry=geometry)
-    #set the correct CRS (Coordinate Reference System), typically WGS84 (EPSG:4326) for lat/lon
+    # Set the correct CRS (Coordinate Reference System), typically WGS84 (EPSG:4326) for lat/lon
     gdf.crs = "EPSG:4326"
     # Save the data to a shapefile ONLY:
-    #Here I add the condition to only proceed if the shapefile is within the netherlands.
+    # Here I add the condition to only proceed if the shapefile is within the netherlands.
     if not boundaries.crs == "EPSG:4326":
         boundaries = boundaries.to_crs("EPSG:4326")
         print("CRS of the boundaries changed into the WGS1984")
@@ -52,7 +54,7 @@ def loop_through_files(input_directory,output_directory):
     # Loop through all the NetCDF files in the directory
     for file_name in os.listdir(input_directory):
         if file_name.endswith('.nc'):
-            # Extract ix and iy from the filename
+            # Extract ix and iy from the filename using regular expressions or string manipulation
             base_name = os.path.basename(file_name)  # Get the base filename
 
             # Example: WINS50_43h21_fERA5_WFP_ptA_NETHERLANDS.NL_ix052_iy180_2019010100-2022010100.nc
@@ -69,18 +71,20 @@ def loop_through_files(input_directory,output_directory):
             # Process the current NetCDF file and save the output shapefile
             process_the_nc(input_file, output_shapefile,nl_border)
 
-# We read the borders for the Netherlands since for this purpose only need the dutch windmills
+# We read the borders for the Netherlands since for this purpose we only need the dutch windmills
 nl_border = gpd.read_file('nl.json')
 
-# Define the directory containing NetCDF files
+# Define the directory containing your NetCDF files
 input_directory = os.path.dirname(os.path.realpath(__file__))
+
+# Get the current working directory (where the Python script is located)
 current_directory = os.path.dirname(os.path.realpath(__file__))
 
-#Define the input directory (where input .nc files are located)
+# Define the input directory (where your .nc files are located)
 input_directory = os.path.join(current_directory, 'nc_files_windmills')
 
-#Define the output directory (where the output .shp files will be saved)
+# Define the output directory (where the .shp files will be saved)
 output_directory = os.path.join(current_directory, 'shpfiles_windmills')
-#call function
+
 loop_through_files(input_directory,output_directory)
 

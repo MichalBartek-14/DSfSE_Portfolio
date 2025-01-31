@@ -31,7 +31,6 @@ class OpenDataAPI:
             f"{self.base_url}/datasets/{dataset_name}/versions/{dataset_version}/files/{file_name}/url"
         )
 
-
 def download_file_from_temporary_download_url(download_url, filename):
     try:
         with requests.get(download_url, stream=True) as r:
@@ -45,8 +44,12 @@ def download_file_from_temporary_download_url(download_url, filename):
 
     logger.info(f"Successfully downloaded dataset file to {filename}")
 
-
 def main():
+    """
+    The function has the API defined and calls the filenames one by one.
+    I have yet to explore how to find which files are available and in which order it downloads them.
+    :return:
+    """
     api_key = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6IjdhYWI0MzM4ZjgxYzQxMTNiOGIzODVmZjljZTZlYjEzIiwiaCI6Im11cm11cjEyOCJ9"
     dataset_name = "wins50_wfp_nl_ts_singlepoint"
     dataset_version = "3"
@@ -54,23 +57,22 @@ def main():
 
     api = OpenDataAPI(api_token=api_key)
 
-    # Adjust maxKeys to retrieve up to 5 files
+    # Adjust maxKeys to retrieve multiple files
     params = {
-        "maxKeys": 2000,  # Retrieve number of files
+        "maxKeys": 1000,  # Retrieve number of files
         "orderBy": "created",
         "sorting": "desc",
     }
 
     response = api.list_files(dataset_name, dataset_version, params)
     print(response)
-    # Debugging: Log the full API response
     logger.info(f"Full API Response: {response}")
 
     if "error" in response:
         logger.error(f"Unable to retrieve list of files: {response['error']}")
         sys.exit(1)
 
-    # Check if files are returned
+    #check if files are returned
     files = response.get("files", [])
     if not files:
         logger.error("No files found for the specified region and time period.")
@@ -79,7 +81,7 @@ def main():
     # Debugging: Log the number of files returned
     logger.info(f"Number of files returned: {len(files)}")
 
-    # Loop through the list of files and download each one
+    #make a loop through the list of files and download each one (except the further specified)
     for file_info in files:
         file_name = file_info.get("filename")
         if not file_name:

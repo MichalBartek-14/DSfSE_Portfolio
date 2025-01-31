@@ -55,11 +55,7 @@ def formatting_windmills():
     dbf_file = "rivm_20240101_Windturbines_ashoogte.dbf"
     dbf_data = DBF(dbf_file)
     df = pd.DataFrame(iter(dbf_data))
-
-    # Print first few rows for reference
     print(df.head())
-
-    # Assume the DBF has 'X' and 'Y' columns in RD (EPSG:28992)
     transformer = Transformer.from_crs("EPSG:28992", "EPSG:4326", always_xy=True)
 
     # Convert RD to WGS84 and create geometry
@@ -69,7 +65,6 @@ def formatting_windmills():
     # Convert to GeoDataFrame
     gdf = gpd.GeoDataFrame(df, geometry='geometry', crs="EPSG:4326")
 
-    # Save as shapefile
     output_shapefile = "windturbines_wgs84.shp"
     gdf.to_file(output_shapefile, driver="ESRI Shapefile")
     print(f"Shapefile saved as {output_shapefile}")
@@ -106,20 +101,18 @@ def create_buffer_and_intersect(windmills_shapefile, merged_shapefile, buffer_di
     clipped_gdf.to_file(output_clipped_shapefile)
     print(f"Clipped shapefile saved as {output_clipped_shapefile}")
 
-# Entry point for script
 if __name__ == "__main__":
-    # Current script directory
     current_directory = os.path.dirname(os.path.realpath(__file__))
 
-    # Path to folder containing shapefiles
+    #Path to folder containing shapefiles
     shapefiles_path = os.path.join(current_directory, 'shpfiles_windmills')
 
-    # Process and merge shapefiles
+    #Process and merge shapefiles
     large_shp(shapefiles_path)
     formatting_windmills()
 
     # Define the paths to the windmills shapefile and merged shapefile
     windmills_shapefile = "windturbines_wgs84.shp"
     merged_shapefile = os.path.join(shapefiles_path, 'merged_WIN50_Harmonie.shp')
-    # Create buffer and intersect
+    #Create buffer and intersect - this part was done in the  ArcGIS due to the time limitation
     #create_buffer_and_intersect(windmills_shapefile, merged_shapefile)
